@@ -1,6 +1,7 @@
 package cc.appauto.ngclient
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.react.PackageList
@@ -10,6 +11,7 @@ import com.facebook.react.ReactRootView
 import com.facebook.react.common.LifecycleState
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 
+private const val TAG = "ngclient"
 
 class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     private var mReactRootView: ReactRootView? = null
@@ -33,7 +35,8 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     }
 
     override fun invokeDefaultOnBackPressed() {
-        super.onBackPressed()
+        Log.i(TAG, "invokeDefaultOnBackPressed")
+        moveTaskToBack(true);
     }
 
     override fun onPause() {
@@ -56,11 +59,10 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     }
 
     override fun onBackPressed(){
-        if (mReactInstanceManager != null){
+        if (mReactInstanceManager != null)
             mReactInstanceManager?.onBackPressed()
-        } else {
-            super.onBackPressed()
-        }
+        else
+            moveTaskToBack(true);
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
