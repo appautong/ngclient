@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             .setUseDeveloperSupport(BuildConfig.DEBUG)
             .setInitialLifecycleState(LifecycleState.RESUMED)
             .build()
-        mReactRootView?.startReactApplication(mReactInstanceManager, "ngclient", null);
-        setContentView(mReactRootView);
+        mReactRootView?.startReactApplication(mReactInstanceManager, "ngclient", null)
+        setContentView(mReactRootView)
     }
 
     override fun invokeDefaultOnBackPressed() {
