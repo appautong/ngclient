@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         mReactRootView = ReactRootView(this)
         val packages: List<ReactPackage> = PackageList(application).packages
         mReactInstanceManager = ReactInstanceManager.builder()
-            .setApplication(getApplication())
+            .setApplication(application)
             .setCurrentActivity(this)
             .setBundleAssetName("index.android.bundle")
             .setJSMainModulePath("index")
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
 
     override fun invokeDefaultOnBackPressed() {
         Log.i(TAG, "invokeDefaultOnBackPressed")
-        moveTaskToBack(true);
+        moveTaskToBack(true)
     }
 
     override fun onPause() {
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         if (mReactInstanceManager != null)
             mReactInstanceManager?.onBackPressed()
         else
-            moveTaskToBack(true);
+            moveTaskToBack(true)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
