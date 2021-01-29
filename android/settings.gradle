@@ -1,3 +1,6 @@
 rootProject.name = "ngclient"
 include ':app'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+
+include ':nglib'
+project(':nglib').projectDir = new File(settingsDir, '../../nglib/lib/')
