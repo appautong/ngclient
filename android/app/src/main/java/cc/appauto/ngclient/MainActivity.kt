@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mReactRootView = ReactRootView(this)
-        val packages: List<ReactPackage> = PackageList(application).packages
+        val packages: MutableList<ReactPackage> = PackageList(application).packages
+        packages.add(AutoNgPackage())
         mReactInstanceManager = ReactInstanceManager.builder()
             .setApplication(application)
             .setCurrentActivity(this)

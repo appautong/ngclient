@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,6 +17,9 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
+
+import {NativeModules} from 'react-native';
+const {autong_module} = NativeModules;
 
 import {
   Header,
@@ -29,6 +32,18 @@ import {
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
+  console.log('in app construct: AutoNgModule is ', autong_module);
+  useEffect(() => {
+    console.log(
+      `${Date.now().toString()}: didmount, schedule dump top app hierarchy`,
+    );
+    setTimeout(() => {
+      autong_module
+        .hierarchyString()
+        .then((data: string) => console.log('hierarchy string: ', data));
+    }, 5000);
+  });
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
