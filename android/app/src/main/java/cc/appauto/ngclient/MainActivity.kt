@@ -1,15 +1,15 @@
 package cc.appauto.ngclient
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.graphics.Rect
+import android.content.Intent
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import cc.appauto.lib.ng.AppAutoContext
 import cc.appauto.lib.ng.checkPermissions
-import cc.appauto.lib.ng.randomInt
 import com.facebook.react.PackageList
 import com.facebook.react.ReactInstanceManager
 import com.facebook.react.ReactPackage
@@ -22,6 +22,8 @@ private const val TAG = "ngclient"
 class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     private var mReactRootView: ReactRootView? = null
     private var mReactInstanceManager: ReactInstanceManager? = null
+    lateinit private var mediaProjectionManager: MediaProjectionManager
+    private var mediaProjection: MediaProjection? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             .build()
         mReactRootView?.startReactApplication(mReactInstanceManager, "ngclient", null)
         setContentView(mReactRootView)
+
+        mediaProjectionManager = getSystemService(MediaProjectionManager::class.java)
     }
 
     override fun invokeDefaultOnBackPressed() {
@@ -86,7 +90,28 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_MENU && mReactInstanceManager != null) {
             mReactInstanceManager?.showDevOptionsDialog()
+            if (mediaProjection == null) {
+                val intent = mediaProjectionManager.createScreenCaptureIntent()
+                startActivityForResult(intent, 12345)
+            } else {
+                AppAutoContext.automedia.takeScreenShot()
+            }
+            return true
         }
         return super.onKeyUp(keyCode, event)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 12345) {
+            if (data == null) return
+            mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
+            if (mediaProjection == null) {
+                Log.w(TAG, "onActivityResult: media projection is null, $resultCode $data")
+                return
+            }
+            AppAutoContext.automedia.mediaProjection = mediaProjection
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }
