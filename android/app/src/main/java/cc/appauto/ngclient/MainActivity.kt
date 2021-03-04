@@ -75,9 +75,10 @@ class MainActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_MENU && mReactInstanceManager != null) {
             mReactInstanceManager?.showDevOptionsDialog()
-            val requested = AppAutoContext.mediaRuntime.requestMediaProjection()
-            Log.i(TAG, "reqeust media projection: $requested")
-            return true
+            AppAutoContext.executor.submitTask {
+                val requested = AppAutoContext.mediaRuntime.requestMediaProjection()
+                Log.i(TAG, "onkeyup: request media projection result: $requested")
+            }
         }
         return super.onKeyUp(keyCode, event)
     }
